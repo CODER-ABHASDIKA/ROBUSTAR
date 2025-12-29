@@ -1,0 +1,749 @@
+<html lang="en" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBUSTAR | Future Robotics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* 3D Cube Animation (Hero) */
+        .scene { width: 200px; height: 200px; perspective: 600px; }
+        .cube {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 15s infinite linear;
+        }
+        .cube__face {
+            position: absolute; width: 200px; height: 200px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(5, 5, 5, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+            backface-visibility: visible;
+            transition: all 0.3s ease;
+        }
+        /* Make cube interactive on hover */
+        .scene:hover .cube__face {
+            border-color: rgba(56, 189, 248, 0.8);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+            background: rgba(5, 5, 5, 0.95);
+        }
+
+        .cube__face--front  { transform: rotateY(  0deg) translateZ(100px); }
+        .cube__face--right  { transform: rotateY( 90deg) translateZ(100px); }
+        .cube__face--back   { transform: rotateY(180deg) translateZ(100px); }
+        .cube__face--left   { transform: rotateY(-90deg) translateZ(100px); }
+        .cube__face--top    { transform: rotateX( 90deg) translateZ(100px); }
+        .cube__face--bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        @keyframes rotateCube {
+            0% { transform: rotateX(-15deg) rotateY(0deg); }
+            100% { transform: rotateX(-15deg) rotateY(360deg); }
+        }
+
+        /* Float Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating { animation: float 6s ease-in-out infinite; }
+
+        /* Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        /* 3D Carousel Styles */
+        .carousel-scene {
+            perspective: 1000px;
+            overflow: visible;
+            display: flex;
+            justify-content: center;
+            height: 400px;
+        }
+        .carousel {
+            width: 260px;
+            height: 320px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCarousel 20s infinite linear;
+        }
+        .carousel:hover {
+            animation-play-state: paused;
+        }
+        .carousel__cell {
+            position: absolute;
+            width: 260px;
+            height: 320px;
+            left: 0;
+            top: 0;
+            transition: transform 0.5s;
+        }
+        /* Mobile fallback for carousel */
+        @media (max-width: 768px) {
+            .carousel-scene { perspective: none; height: auto; display: block; }
+            .carousel { 
+                width: 100%; height: auto; 
+                transform-style: flat; 
+                animation: none; 
+                display: flex; 
+                overflow-x: auto; 
+                gap: 1rem;
+                padding-bottom: 2rem;
+                scroll-snap-type: x mandatory;
+            }
+            .carousel__cell { 
+                position: relative; 
+                width: 260px; height: 320px; 
+                flex-shrink: 0; 
+                transform: none !important; 
+                scroll-snap-align: center;
+            }
+        }
+
+        @keyframes rotateCarousel {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(-360deg); }
+        }
+
+        /* Interactive Hover Cards */
+        .interactive-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .interactive-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.2);
+            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(20, 20, 20, 0.6);
+        }
+        
+        /* Button Glow */
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .text-glow {
+            transition: text-shadow 0.3s;
+        }
+        .text-glow:hover {
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        /* Infinite Marquee */
+        .marquee-container {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-content {
+            animation: scroll 30s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Terminal/Radar Animations */
+        @keyframes blink { 50% { opacity: 0; } }
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        
+        @keyframes radar-spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        .radar-sweep {
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(6, 182, 212, 0.5) 360deg);
+            animation: radar-spin 2s linear infinite;
+            border-radius: 50%;
+        }
+        .radar-blip {
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        /* Coding Typing Simulation */
+        .typing-line {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            animation: typing 2s steps(40, end) forwards;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-black">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="text-xl font-semibold tracking-tighter text-white flex items-center gap-2 group">
+                <span class="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.8)] group-hover:scale-125 transition-transform duration-300"></span>
+                <span class="group-hover:tracking-widest transition-all duration-300">ROBUSTAR</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
+                <a href="#about" class="hover:text-white transition-colors hover:scale-105 transform">About</a>
+                <a href="#code" class="hover:text-white transition-colors hover:scale-105 transform">Platform</a>
+                <a href="#products" class="hover:text-white transition-colors hover:scale-105 transform">Products</a>
+                <a href="#team" class="hover:text-white transition-colors hover:scale-105 transform">Team</a>
+            </div>
+            <a href="#shop" class="group hidden md:flex items-center gap-2 bg-white text-black text-xs font-semibold px-4 py-2 rounded-full hover:bg-neutral-200 transition-all btn-glow">
+                Visit Store
+                <span class="iconify group-hover:translate-x-1 transition-transform" data-icon="lucide:arrow-right" data-width="14"></span>
+            </a>
+            <!-- Mobile Menu Icon -->
+            <button class="md:hidden text-white hover:text-cyan-400 transition-colors">
+                <span class="iconify" data-icon="lucide:menu" data-width="24"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-grid z-0 pointer-events-none"></div>
+        <!-- Interactive gradient background -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="space-y-8 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-xs font-medium text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all cursor-default">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                    </span>
+                    New Kits Available
+                </div>
+                <h1 class="text-5xl md:text-7xl font-semibold tracking-tighter leading-[1.1] cursor-default">
+                    Engineer the <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 hover:to-cyan-200 transition-all duration-500">Future Today.</span>
+                </h1>
+                <p class="text-lg text-neutral-400 max-w-lg mx-auto lg:mx-0 font-light leading-relaxed hover:text-neutral-200 transition-colors">
+                    Premium DIY robotic kits, ready-made projects, and industrial-grade components. Empowering the next generation of makers with ROBUSTAR.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                    <a href="#products" class="px-8 py-3 bg-white text-black font-medium rounded-full hover:bg-neutral-200 transition-all text-sm w-full sm:w-auto btn-glow transform hover:-translate-y-1">
+                        Explore Kits
+                    </a>
+                    <a href="#about" class="px-8 py-3 border border-white/20 text-white font-medium rounded-full hover:bg-white/10 hover:border-white transition-all text-sm w-full sm:w-auto transform hover:-translate-y-1">
+                        Our Mission
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3D Object / Animation Area -->
+            <div class="h-[400px] flex items-center justify-center perspective-1000">
+                <div class="scene floating cursor-pointer group">
+                    <div class="cube">
+                        <div class="cube__face cube__face--front group-hover:opacity-100 opacity-90">
+                            <span class="iconify text-cyan-400 group-hover:scale-125 transition-transform duration-300" data-icon="lucide:cpu" data-width="64" data-stroke-width="1"></span>
+                        </div>
+                        <div class="cube__face cube__face--back group-hover:opacity-100 opacity-90">
+                            <span class="iconify text-cyan-400 group-hover:scale-125 transition-transform duration-300" data-icon="lucide:bot" data-width="64" data-stroke-width="1"></span>
+                        </div>
+                        <div class="cube__face cube__face--right group-hover:opacity-100 opacity-90">
+                            <span class="iconify text-cyan-400 group-hover:scale-125 transition-transform duration-300" data-icon="lucide:zap" data-width="64" data-stroke-width="1"></span>
+                        </div>
+                        <div class="cube__face cube__face--left group-hover:opacity-100 opacity-90">
+                            <span class="iconify text-cyan-400 group-hover:scale-125 transition-transform duration-300" data-icon="lucide:layers" data-width="64" data-stroke-width="1"></span>
+                        </div>
+                        <div class="cube__face cube__face--top group-hover:opacity-100 opacity-90"></div>
+                        <div class="cube__face cube__face--bottom group-hover:opacity-100 opacity-90"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Infinite Marquee (Retention/Social Proof) -->
+    <div class="py-10 border-y border-white/5 bg-neutral-950/50 marquee-container overflow-hidden">
+        <div class="flex marquee-content whitespace-nowrap items-center">
+            <!-- First Set -->
+            <div class="flex gap-16 items-center px-8">
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:cpu" data-width="24"></span> RISC-V Compatible</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:code-2" data-width="24"></span> Python Ready</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:wifi" data-width="24"></span> IoT Connectivity</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:terminal-square" data-width="24"></span> Linux Support</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:gamepad-2" data-width="24"></span> Remote Control</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:database" data-width="24"></span> Local Processing</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:video" data-width="24"></span> Computer Vision</div>
+            </div>
+            <!-- Duplicate Set for Smooth Loop -->
+            <div class="flex gap-16 items-center px-8">
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:cpu" data-width="24"></span> RISC-V Compatible</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:code-2" data-width="24"></span> Python Ready</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:wifi" data-width="24"></span> IoT Connectivity</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:terminal-square" data-width="24"></span> Linux Support</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:gamepad-2" data-width="24"></span> Remote Control</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:database" data-width="24"></span> Local Processing</div>
+                <div class="flex items-center gap-2 text-neutral-500 font-medium"><span class="iconify" data-icon="lucide:video" data-width="24"></span> Computer Vision</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative bg-neutral-950/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-2xl opacity-50 rounded-full group-hover:opacity-75 transition-opacity duration-700"></div>
+                    <div class="relative grid grid-cols-2 gap-4">
+                        <div class="bg-neutral-900 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center gap-2 aspect-square text-center interactive-card cursor-pointer">
+                            <span class="iconify text-white mb-2" data-icon="lucide:wrench" data-width="32"></span>
+                            <span class="text-2xl font-semibold text-white tracking-tight">500+</span>
+                            <span class="text-xs text-neutral-500 uppercase tracking-widest">Kits Sold</span>
+                        </div>
+                        <div class="bg-neutral-900 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center gap-2 aspect-square text-center interactive-card translate-y-8 cursor-pointer">
+                            <span class="iconify text-white mb-2" data-icon="lucide:users" data-width="32"></span>
+                            <span class="text-2xl font-semibold text-white tracking-tight">10k+</span>
+                            <span class="text-xs text-neutral-500 uppercase tracking-widest">Community</span>
+                        </div>
+                        <div class="bg-neutral-900 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center gap-2 aspect-square text-center interactive-card cursor-pointer">
+                            <span class="iconify text-white mb-2" data-icon="lucide:award" data-width="32"></span>
+                            <span class="text-2xl font-semibold text-white tracking-tight">Top</span>
+                            <span class="text-xs text-neutral-500 uppercase tracking-widest">Quality</span>
+                        </div>
+                        <div class="bg-neutral-900 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center gap-2 aspect-square text-center interactive-card translate-y-8 cursor-pointer">
+                            <span class="iconify text-white mb-2" data-icon="lucide:globe" data-width="32"></span>
+                            <span class="text-2xl font-semibold text-white tracking-tight">Global</span>
+                            <span class="text-xs text-neutral-500 uppercase tracking-widest">Shipping</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-cyan-400 tracking-widest uppercase mb-3">About Us</h2>
+                    <h3 class="text-3xl md:text-4xl font-semibold tracking-tight mb-6 hover:tracking-wide transition-all duration-300 cursor-default">Democratizing Robotics for Every Creator</h3>
+                    <p class="text-neutral-400 leading-relaxed mb-6 font-light">
+                        At <span class="text-white font-medium text-glow cursor-default">ROBUSTAR</span>, we believe innovation shouldn't be limited by access to hardware. We started as a small garage project and grew into a hub for robotics enthusiasts.
+                    </p>
+                    <p class="text-neutral-400 leading-relaxed mb-8 font-light">
+                        Whether you are a student taking your first step into STEM or a seasoned engineer prototyping the next big thing, our curated DIY kits and high-precision components are designed to bring your ideas to life.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3 text-sm text-neutral-300 group cursor-pointer">
+                            <span class="iconify text-cyan-500 group-hover:rotate-12 transition-transform" data-icon="lucide:check-circle-2" data-width="18"></span>
+                            <span class="group-hover:text-white transition-colors">Open Source Friendly Designs</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-neutral-300 group cursor-pointer">
+                            <span class="iconify text-cyan-500 group-hover:rotate-12 transition-transform" data-icon="lucide:check-circle-2" data-width="18"></span>
+                            <span class="group-hover:text-white transition-colors">Industrial Grade Components</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-neutral-300 group cursor-pointer">
+                            <span class="iconify text-cyan-500 group-hover:rotate-12 transition-transform" data-icon="lucide:check-circle-2" data-width="18"></span>
+                            <span class="group-hover:text-white transition-colors">24/7 Technical Support for Builders</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Interactive Code Simulation Section (High Engagement) -->
+    <section id="code" class="py-24 border-t border-white/5 relative bg-black overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-cyan-900/10 blur-[100px] pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">Code. Compile. Conquer.</h2>
+                <p class="text-neutral-400 font-light max-w-2xl mx-auto">
+                    Seamlessly integrate with popular frameworks. From Python scripts to C++ firmware, full control is in your hands.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <!-- Code Window -->
+                <div class="bg-[#121212] border border-white/10 rounded-xl overflow-hidden shadow-2xl relative group">
+                    <!-- Window Header -->
+                    <div class="bg-[#1a1a1a] px-4 py-3 flex items-center gap-2 border-b border-white/5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                        <div class="ml-4 text-xs text-neutral-500 font-mono">controller.py</div>
+                    </div>
+                    <!-- Code Body -->
+                    <div class="p-6 font-mono text-sm leading-relaxed text-neutral-300 h-[300px] overflow-hidden">
+                        <div class="opacity-50 select-none">1 &nbsp; import <span class="text-purple-400">robustar</span> as <span class="text-yellow-200">rb</span></div>
+                        <div class="opacity-50 select-none">2 &nbsp; </div>
+                        <div class="select-none">3 &nbsp; <span class="text-pink-500">def</span> <span class="text-blue-400">scan_environment</span>():</div>
+                        <div class="select-none">4 &nbsp; &nbsp; &nbsp; robot = <span class="text-yellow-200">rb</span>.<span class="text-blue-400">Drone</span>(mode=<span class="text-green-400">"autonomous"</span>)</div>
+                        <div class="select-none">5 &nbsp; &nbsp; &nbsp; robot.<span class="text-blue-400">calibrate_sensors</span>()</div>
+                        <div class="select-none">6 &nbsp; &nbsp; &nbsp; </div>
+                        <!-- Typing animation effect -->
+                        <div class="flex items-center">
+                            <span class="opacity-50 select-none mr-3">7 &nbsp; </span>
+                            <span class="text-cyan-400 typing-line">robot.move_to(x=45, y=120, z=10)</span>
+                            <span class="w-2 h-4 bg-cyan-400 ml-1 cursor-blink"></span>
+                        </div>
+                        <div class="opacity-50 select-none mt-1">8 &nbsp; &nbsp; &nbsp; return <span class="text-purple-400">True</span></div>
+                    </div>
+                </div>
+
+                <!-- Visual Simulation / HUD -->
+                <div class="relative bg-neutral-900/30 border border-white/10 rounded-xl p-8 h-[365px] flex flex-col items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoNiwgMTgyLCAyMTIsIDAuMSkiLz48L3N2Zz4=')] opacity-50"></div>
+                    
+                    <!-- Radar Circle -->
+                    <div class="relative w-64 h-64 border border-cyan-500/20 rounded-full flex items-center justify-center">
+                        <div class="absolute inset-0 rounded-full radar-sweep opacity-20"></div>
+                        <div class="w-[200px] h-[200px] border border-cyan-500/10 rounded-full"></div>
+                        <div class="w-[100px] h-[100px] border border-cyan-500/10 rounded-full"></div>
+                        
+                        <!-- Center Point -->
+                        <div class="w-3 h-3 bg-cyan-500 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.8)] z-10"></div>
+                        
+                        <!-- Blips -->
+                        <div class="absolute top-10 right-14 w-2 h-2 bg-red-400 rounded-full radar-blip opacity-80"></div>
+                        <div class="absolute bottom-16 left-12 w-2 h-2 bg-green-400 rounded-full radar-blip opacity-80" style="animation-delay: 1s;"></div>
+                    </div>
+
+                    <div class="absolute bottom-4 left-4 right-4 flex justify-between text-xs font-mono text-cyan-500/70 bg-black/50 p-2 rounded border border-white/5">
+                        <span>STATUS: ONLINE</span>
+                        <span>BATTERY: 84%</span>
+                        <span>GPS: LOCKED</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products / Selling Section -->
+    <section id="products" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">Our Ecosystem</h2>
+                <p class="text-neutral-400 font-light max-w-2xl mx-auto">
+                    Everything you need to build, learn, and deploy. Choose from our wide range of categories.
+                </p>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- DIY Kits Card (Large) -->
+                <div class="md:col-span-2 bg-neutral-900/50 border border-white/5 rounded-3xl p-8 relative overflow-hidden group hover:border-white/20 transition-all duration-500 interactive-card">
+                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <div class="group-hover:translate-x-2 transition-transform duration-300">
+                            <span class="iconify text-cyan-400 mb-4 group-hover:scale-110 transition-transform duration-300 origin-left" data-icon="lucide:hammer" data-width="32"></span>
+                            <h3 class="text-2xl font-medium tracking-tight text-white mb-2">DIY Robotics Kits</h3>
+                            <p class="text-neutral-400 font-light text-sm max-w-sm">Complete packages containing servos, microcontrollers, and chassis parts to build rovers, arms, and drones from scratch.</p>
+                        </div>
+                        <div class="mt-8 flex justify-end">
+                            <div class="w-32 h-32 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full blur-2xl opacity-20 group-hover:opacity-40 group-hover:scale-125 transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ready Made (Tall) -->
+                <div class="md:row-span-2 bg-neutral-900/50 border border-white/5 rounded-3xl p-8 relative overflow-hidden group hover:border-white/20 transition-all duration-500 interactive-card">
+                    <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="group-hover:translate-x-2 transition-transform duration-300">
+                            <span class="iconify text-purple-400 mb-4 group-hover:rotate-12 transition-transform duration-300" data-icon="lucide:box" data-width="32"></span>
+                            <h3 class="text-2xl font-medium tracking-tight text-white mb-2">Ready-Made Projects</h3>
+                            <p class="text-neutral-400 font-light text-sm mb-6">Pre-assembled bots for education and demonstration. Unbox and code immediately.</p>
+                        </div>
+                        
+                        <!-- Visual representation of list -->
+                        <div class="space-y-3 mt-8">
+                            <div class="h-10 w-full bg-white/5 rounded-lg border border-white/5 flex items-center px-3 gap-3 group-hover:bg-white/10 transition-colors delay-75">
+                                <div class="w-2 h-2 rounded-full bg-purple-500 group-hover:scale-150 transition-transform"></div>
+                                <div class="h-1 w-12 bg-white/20 rounded"></div>
+                            </div>
+                            <div class="h-10 w-full bg-white/5 rounded-lg border border-white/5 flex items-center px-3 gap-3 group-hover:bg-white/10 transition-colors delay-100">
+                                <div class="w-2 h-2 rounded-full bg-cyan-500 group-hover:scale-150 transition-transform"></div>
+                                <div class="h-1 w-20 bg-white/20 rounded"></div>
+                            </div>
+                            <div class="h-10 w-full bg-white/5 rounded-lg border border-white/5 flex items-center px-3 gap-3 group-hover:bg-white/10 transition-colors delay-150">
+                                <div class="w-2 h-2 rounded-full bg-pink-500 group-hover:scale-150 transition-transform"></div>
+                                <div class="h-1 w-16 bg-white/20 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Components (Small) -->
+                <div class="bg-neutral-900/50 border border-white/5 rounded-3xl p-8 relative overflow-hidden group hover:border-white/20 transition-all duration-500 interactive-card">
+                    <div class="relative z-10 group-hover:translate-y-[-4px] transition-transform duration-300">
+                        <span class="iconify text-emerald-400 mb-4 group-hover:rotate-90 transition-transform duration-500" data-icon="lucide:circuit-board" data-width="32"></span>
+                        <h3 class="text-xl font-medium tracking-tight text-white mb-2">Components</h3>
+                        <p class="text-neutral-400 font-light text-sm">Sensors, motors, and microcontrollers for custom builds.</p>
+                    </div>
+                </div>
+
+                <!-- Accessories (Small) -->
+                <div class="bg-neutral-900/50 border border-white/5 rounded-3xl p-8 relative overflow-hidden group hover:border-white/20 transition-all duration-500 interactive-card">
+                    <div class="relative z-10 group-hover:translate-y-[-4px] transition-transform duration-300">
+                        <span class="iconify text-orange-400 mb-4 group-hover:text-yellow-400 transition-colors" data-icon="lucide:battery-charging" data-width="32"></span>
+                        <h3 class="text-xl font-medium tracking-tight text-white mb-2">Power &amp; Tools</h3>
+                        <p class="text-neutral-400 font-light text-sm">LiPo batteries, chargers, and precision screwdrivers.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- E-Commerce CTA Section -->
+    <section id="shop" class="py-24 px-6">
+        <div class="max-w-5xl mx-auto relative group">
+            <div class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-700 blur-3xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity duration-700"></div>
+            
+            <div class="relative bg-neutral-900 border border-white/10 rounded-3xl p-12 md:p-20 text-center overflow-hidden transition-all duration-500 group-hover:border-white/20 group-hover:transform group-hover:scale-[1.01]">
+                <!-- Background decorative grid -->
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
+                
+                <h2 class="text-4xl md:text-5xl font-semibold tracking-tighter text-white mb-6 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-cyan-200 transition-all">Ready to start building?</h2>
+                <p class="text-lg text-neutral-400 mb-10 max-w-xl mx-auto font-light">
+                    Visit our official e-commerce store to browse our full catalog, check availability, and place orders securely.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button class="group/btn bg-white text-black px-8 py-4 rounded-full font-medium text-base hover:bg-cyan-50 transition-all flex items-center gap-2 btn-glow transform hover:-translate-y-1">
+                        Go to Shop
+                        <span class="iconify group-hover/btn:translate-x-1 transition-transform" data-icon="lucide:shopping-bag" data-width="18"></span>
+                    </button>
+                    <button class="text-white px-8 py-4 rounded-full font-medium text-base hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
+                        View Catalog PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section with 3D Carousel -->
+    <section id="team" class="py-24 border-t border-white/5 bg-black overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 mb-16">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-6 relative z-10">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">The Minds Behind ROBUSTAR</h2>
+                    <p class="text-neutral-400 font-light max-w-xl">
+                        A diverse team of engineers, designers, and visionaries dedicated to advancing personal robotics.
+                    </p>
+                </div>
+                <button class="text-sm font-medium text-white border-b border-white/20 pb-1 hover:border-white hover:text-cyan-400 transition-all">Join our team</button>
+            </div>
+        </div>
+
+        <!-- 3D Carousel Container -->
+        <div class="carousel-scene py-10">
+            <div class="carousel">
+                <!-- Member 1 -->
+                <div class="carousel__cell" style="transform: rotateY(0deg) translateZ(350px);">
+                    <div class="w-full h-full bg-neutral-900 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-neutral-800 transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-500 transition-colors">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=John&amp;backgroundColor=b6e3f4" alt="Team" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-medium text-white group-hover:text-cyan-400 transition-colors">John Doe</h3>
+                            <p class="text-xs text-neutral-500 uppercase tracking-widest mt-1">Founder &amp; CEO</p>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:linkedin" data-width="16"></span>
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:twitter" data-width="16"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 2 -->
+                <div class="carousel__cell" style="transform: rotateY(60deg) translateZ(350px);">
+                    <div class="w-full h-full bg-neutral-900 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-neutral-800 transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-500 transition-colors">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Sarah&amp;backgroundColor=c0aede" alt="Team" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-medium text-white group-hover:text-cyan-400 transition-colors">Sarah Smith</h3>
+                            <p class="text-xs text-neutral-500 uppercase tracking-widest mt-1">Lead Engineer</p>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:linkedin" data-width="16"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 3 -->
+                <div class="carousel__cell" style="transform: rotateY(120deg) translateZ(350px);">
+                    <div class="w-full h-full bg-neutral-900 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-neutral-800 transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-500 transition-colors">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Mike&amp;backgroundColor=ffdfbf" alt="Team" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-medium text-white group-hover:text-cyan-400 transition-colors">Mike Chen</h3>
+                            <p class="text-xs text-neutral-500 uppercase tracking-widest mt-1">Product Designer</p>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:dribbble" data-width="16"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 4 -->
+                <div class="carousel__cell" style="transform: rotateY(180deg) translateZ(350px);">
+                    <div class="w-full h-full bg-neutral-900 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-neutral-800 transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-500 transition-colors">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Emily&amp;backgroundColor=d1d4f9" alt="Team" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-medium text-white group-hover:text-cyan-400 transition-colors">Emily Davis</h3>
+                            <p class="text-xs text-neutral-500 uppercase tracking-widest mt-1">Systems</p>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:github" data-width="16"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 5 -->
+                <div class="carousel__cell" style="transform: rotateY(240deg) translateZ(350px);">
+                    <div class="w-full h-full bg-neutral-900 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-neutral-800 transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-500 transition-colors">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Alex&amp;backgroundColor=b6e3f4" alt="Team" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-medium text-white group-hover:text-cyan-400 transition-colors">Alex Wong</h3>
+                            <p class="text-xs text-neutral-500 uppercase tracking-widest mt-1">Operations</p>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:linkedin" data-width="16"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 6 -->
+                <div class="carousel__cell" style="transform: rotateY(300deg) translateZ(350px);">
+                    <div class="w-full h-full bg-neutral-900 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-neutral-800 transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-500 transition-colors">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Jessica&amp;backgroundColor=ffdfbf" alt="Team" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-medium text-white group-hover:text-cyan-400 transition-colors">Jessica Lee</h3>
+                            <p class="text-xs text-neutral-500 uppercase tracking-widest mt-1">Marketing</p>
+                        </div>
+                        <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                            <span class="iconify text-neutral-400 hover:text-white" data-icon="lucide:instagram" data-width="16"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 border-t border-white/5 relative">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16">
+            <div>
+                <h2 class="text-3xl font-semibold tracking-tight mb-6">Get in Touch</h2>
+                <p class="text-neutral-400 font-light mb-8">
+                    Have a question about a kit? Need a custom component order? Fill out the form or reach us via email.
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4 group cursor-pointer">
+                        <div class="p-3 bg-white/5 rounded-lg border border-white/5 group-hover:bg-white/10 group-hover:border-cyan-500/30 transition-all">
+                            <span class="iconify text-white group-hover:scale-110 transition-transform" data-icon="lucide:mail" data-width="20"></span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors">Email</p>
+                            <p class="text-sm text-neutral-400">support@robustar.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 group cursor-pointer">
+                        <div class="p-3 bg-white/5 rounded-lg border border-white/5 group-hover:bg-white/10 group-hover:border-cyan-500/30 transition-all">
+                            <span class="iconify text-white group-hover:scale-110 transition-transform" data-icon="lucide:map-pin" data-width="20"></span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors">Office</p>
+                            <p class="text-sm text-neutral-400">123 Tech Park Blvd, Innovation City</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 group cursor-pointer">
+                        <div class="p-3 bg-white/5 rounded-lg border border-white/5 group-hover:bg-white/10 group-hover:border-cyan-500/30 transition-all">
+                            <span class="iconify text-white group-hover:scale-110 transition-transform" data-icon="lucide:phone" data-width="20"></span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors">Phone</p>
+                            <p class="text-sm text-neutral-400">+1 (555) 000-ROBO</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Form -->
+            <form class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-xs font-medium text-neutral-400 ml-1">First Name</label>
+                        <input type="text" class="w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 focus:bg-neutral-800 transition-all placeholder:text-neutral-700" placeholder="Jane">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-medium text-neutral-400 ml-1">Last Name</label>
+                        <input type="text" class="w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 focus:bg-neutral-800 transition-all placeholder:text-neutral-700" placeholder="Doe">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-medium text-neutral-400 ml-1">Email</label>
+                    <input type="email" class="w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 focus:bg-neutral-800 transition-all placeholder:text-neutral-700" placeholder="jane@example.com">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-medium text-neutral-400 ml-1">Subject</label>
+                    <!-- Custom Dropdown Appearance -->
+                    <div class="relative">
+                        <select class="w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 focus:bg-neutral-800 transition-all appearance-none cursor-pointer">
+                            <option>General Inquiry</option>
+                            <option>Bulk Order</option>
+                            <option>Support</option>
+                        </select>
+                        <span class="iconify absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" data-icon="lucide:chevron-down" data-width="16"></span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-medium text-neutral-400 ml-1">Message</label>
+                    <textarea rows="4" class="w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 focus:bg-neutral-800 transition-all placeholder:text-neutral-700" placeholder="How can we help?"></textarea>
+                </div>
+                
+                <!-- Custom Checkbox -->
+                <div class="flex items-center gap-2 pt-2">
+                    <input type="checkbox" id="terms" class="appearance-none w-4 h-4 border border-white/20 rounded bg-neutral-900 checked:bg-cyan-500 checked:border-cyan-500 relative cursor-pointer transition-colors">
+                    <label for="terms" class="text-xs text-neutral-400 cursor-pointer hover:text-white transition-colors">I agree to the privacy policy.</label>
+                </div>
+
+                <button type="button" class="w-full bg-white text-black font-medium py-3 rounded-lg mt-4 hover:bg-neutral-200 transition-all btn-glow transform hover:-translate-y-1">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 bg-black">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left group cursor-pointer">
+                <a href="#" class="text-lg font-semibold tracking-tighter text-white group-hover:text-cyan-400 transition-colors">ROBUSTAR</a>
+                <p class="text-xs text-neutral-500 mt-2">© 2023 Robustar Inc. All rights reserved.</p>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="text-neutral-500 hover:text-white hover:scale-125 transition-all"><span class="iconify" data-icon="lucide:twitter" data-width="20"></span></a>
+                <a href="#" class="text-neutral-500 hover:text-white hover:scale-125 transition-all"><span class="iconify" data-icon="lucide:github" data-width="20"></span></a>
+                <a href="#" class="text-neutral-500 hover:text-white hover:scale-125 transition-all"><span class="iconify" data-icon="lucide:instagram" data-width="20"></span></a>
+                <a href="#" class="text-neutral-500 hover:text-white hover:scale-125 transition-all"><span class="iconify" data-icon="lucide:linkedin" data-width="20"></span></a>
+            </div>
+        </div>
+    </footer>
+
+
+</body></html>
